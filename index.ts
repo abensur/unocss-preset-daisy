@@ -27,7 +27,7 @@ const replaceSpace = (css: string) =>
 	// HSL
 	// 123 4% 5% -> 123, 4%, 5%
 	css.replace(/([\d.]+) ([\d.%]+) ([\d.%]+)/g, '$1, $2, $3')
-
+const replaceFix = (css) => css.replace(/offset\), 2\)/g, 'offset) / 2)').replace(/offset\), -2\)/g, 'offset) / -2)');
 const defaultOptions = {
 	styled: true,
 	themes: false as
@@ -107,7 +107,7 @@ export const presetDaisy = (
 	if (options.base) {
 		preflights.unshift({
 			// eslint-disable-next-line @typescript-eslint/naming-convention
-			getCSS: () => replaceSlash(replacePrefix(process(base).css)),
+			getCSS: () => replaceFix(replaceSlash(replacePrefix(process(base).css))),
 			layer: 'daisy-base',
 		})
 	}
@@ -162,7 +162,7 @@ export const presetDaisy = (
 			([base, rule]) =>
 				[
 					new RegExp(`^${base}$`),
-					() => replaceSlash(replacePrefix(rule)),
+					() => replaceFix(replaceSlash(replacePrefix(rule))),
 					{
 						layer: base.startsWith('checkbox-')
 							? 'daisy-components-post'
